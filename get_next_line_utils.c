@@ -6,7 +6,7 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:20:45 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/11/20 17:22:31 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/11/21 15:17:32 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ int	ft_strlen(char *s)
 
 	i = 0;
 	if (!s)
-		return (NULL);
+		return (0);
 	while (s[i])
 		i ++;
 	return (i);
 }
+// int	ft_check_line_eol(char stash)
+// {
+
+// }

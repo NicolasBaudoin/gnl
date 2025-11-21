@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/21 14:32:10 by nbaudoin          #+#    #+#             */
+/*   Updated: 2025/11/21 14:55:19 by nbaudoin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
+#include <stdio.h>
 
-int  main()
+int	main(void)
 {
+	char	*file_name;
+	int		fd;
 
-	char* fileName = "test.txt";
-
-	int fd = open(fileName, O_RDWR);
-
+	file_name = "test.txt";
+	fd = open(file_name, O_RDWR);
 	get_next_line(fd);
-
-	return 0;
+	return (0);
 }
