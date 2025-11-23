@@ -6,14 +6,14 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:49:34 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/11/23 18:39:02 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/11/23 21:29:06 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*ft_create_line_line(char *stash, int index, int len)
+char	*ft_create_line(char *stash, int index, int len)
 {
 	char	*new_stash;
 	char	*line;
@@ -33,13 +33,11 @@ char	*get_next_line(int fd)
 	char 			*line;
 
 	if(fd == -1)
-	{
 		return (NULL);
-	}
 	else
-	printf("\nFile : opened sucessfully!\n");
+		printf("\nFile : opened sucessfully!\n");
 
-	while (ft_check_and_find_eol(stash) == '0')
+	while (ft_check_and_find_eol(stash) == 0)
 	{
 		len = read(fd, buffer, BUFFER_SIZE);
 		if (len <= 0)
@@ -49,12 +47,8 @@ char	*get_next_line(int fd)
 	}
 	if (stash)
 	{
-		line = ft_create_line(stash);
-		stash = ft_clean(stash);
+		line = ft_create_line(stash, ft_check_and_find_eol(stash), len);
 		return (line);
 	}
-	printf("\t%d bytes read!\n", len);
-	printf("File Contents: %s\n", buffer);
-	printf("Stash content: %s\n", stash);
 	return (NULL);
 }

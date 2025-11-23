@@ -6,7 +6,7 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:20:45 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/11/23 18:45:51 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/11/23 21:28:23 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_check_and_find_eol(char *stash)
 			return i;
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
 char	*ft_substr(char  *s, int start, int len)
@@ -62,5 +62,31 @@ char	*ft_substr(char  *s, int start, int len)
 	}
 	p[i] = '\0';
 	return (p);
+}
+char	*ft_strjoin(char *stash, char *buffer)
+{
+	char	*s;
+	int		len;
+	int		i;
+	int		k;
+
+	len = ft_check_and_find_eol(stash);
+	s = malloc(sizeof(char) * (len + BUFFER_SIZE + 1));
+	i = 0;
+	while (stash[i])
+	{
+		s[i] = stash[i];
+		i++;
+	}
+	k = 0;
+	while (buffer[k])
+	{
+		s[i] = buffer[k];
+		i++;
+		k++;
+	}
+	s[i] = '\0';
+	free(buffer);
+	return (s);
 }
 
