@@ -11,44 +11,53 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-char	*ft_create_line(char *stash, int index, int len)
+char	*ft_extract_line_from_stash(char **stash)
 {
 	char	*new_stash;
 	char	*line;
+	int		index;
 
-	line = ft_substr(stash, 0, index + 1);
-	new_stash = ft_substr(stash, index + 1, len - (index + 1));
-	free(stash);
-	stash = new_stash;
+	if (!*stash)
+		return (NULL);
+	index = ft_check_and_find_eol(*stash);
+	if (index == -1)
+	{
+		line = ft_substr(*stash, 0, ft_strlen(*stash));
+		free(*stash);
+		*stash = (NULL);
+		return (line);
+	}
+	line = ft_substr(*stash, 0, index + 1);
+	new_stash = ft_substr(*stash, index + 1, ft_strlen(*stash) - (index + 1));
+	free(*stash);
+	*stash = new_stash;
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	static	char	*stash;
-	char			buffer[1024];
-	int				len;
+	char			buffer[BUFFER_SIZE + 1];
+	int				bytes;
 	char 			*line;
 
-	if(fd == -1)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	else
-		printf("\nFile : opened sucessfully!\n");
-
-	while (ft_check_and_find_eol(stash) == 0)
+	while (ft_check_and_find_eol(stash) == -1)
 	{
-		len = read(fd, buffer, BUFFER_SIZE);
-		if (len <= 0)
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes <= 0)
 			break;
-		buffer[len] = '\0';
-		stash = ft_strjoin(stash, buffer);
+		buffer[bytes] = '\0';
+		ft_strjoin(& stash, buffer);
 	}
-	if (stash)
+	if (!stash || stash[0] == '\0')
 	{
-		line = ft_create_line(stash, ft_check_and_find_eol(stash), len);
-		return (line);
+		free(stash);
+		stash = NULL;
+		return (NULL);
 	}
-	return (NULL);
+	line = ft_extract_line_from_stash(&stash);
+	return (line);
 }

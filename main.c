@@ -21,5 +21,6 @@ int	main(void)
 	file_name = "test.txt";
 	fd = open(file_name, O_RDWR);
 	printf("%s", get_next_line(fd));
+	close(fd);
 	return (0);
 }

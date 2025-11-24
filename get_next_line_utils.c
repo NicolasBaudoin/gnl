@@ -29,13 +29,15 @@ int	ft_check_and_find_eol(char *stash)
 	int	i;
 
 	i = 0;
+	if (!stash)
+		return (-1);
 	while (stash[i])
 	{
 		if (stash[i] == '\n')
-			return i;
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 char	*ft_substr(char  *s, int start, int len)
@@ -63,30 +65,32 @@ char	*ft_substr(char  *s, int start, int len)
 	p[i] = '\0';
 	return (p);
 }
-char	*ft_strjoin(char *stash, char *buffer)
+char	*ft_strjoin(char **stash, char *buffer)
 {
-	char	*s;
-	int		len;
+	char	*new;
 	int		i;
 	int		k;
 
-	len = ft_check_and_find_eol(stash);
-	s = malloc(sizeof(char) * (len + BUFFER_SIZE + 1));
-	i = 0;
-	while (stash[i])
+	if (!buffer)
+		return  ;
+	if (!*stash)
 	{
-		s[i] = stash[i];
-		i++;
+		*stash = malloc(1);
+		if (!*stash)
+			return (NULL);
+		(*stash)[0] = '\0';
 	}
-	k = 0;
-	while (buffer[k])
-	{
-		s[i] = buffer[k];
-		i++;
-		k++;
-	}
-	s[i] = '\0';
-	free(buffer);
-	return (s);
+	new = malloc(ft_strlen(*stash) + ft_strlen(buffer) + 1);
+	if (!new)
+		return (NULL);
+	i = -1;
+	while ((*stash)[++i])
+		new[i] = (*stash)[i];
+	k = -1;
+	while (buffer[++k])
+		new[i + k] = buffer[k];
+	new[i + k] = '\0';
+	free(*stash);
+	return (new);
 }
 
