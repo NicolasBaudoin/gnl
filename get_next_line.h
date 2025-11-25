@@ -6,7 +6,7 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:47:23 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/11/23 21:30:53 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:15:40 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 char	*get_next_line(int fd);
 int		ft_strlen(char *s);
 int		ft_check_and_find_eol(char *stash);
-char	*ft_extract_line_from_stash(char **stash, int index)
-char	*ft_substr(char  *s, int start, int len);
-char	*ft_strjoin(char *stash, char *buffer);
+char	*ft_extract_line_from_stash(char **stash);
+char	*ft_substr(char *s, int start, int len);
+char	*ft_strjoin(char **stash, char *buffer);
 
 #endif
