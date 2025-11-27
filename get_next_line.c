@@ -6,7 +6,7 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:49:34 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/11/26 22:43:50 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/11/27 01:07:47 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ char	*ft_extract_line_from_stash(char **stash)
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char		buffer[BUFFER_SIZE + 1];
+	char		buffer[(unsigned long)BUFFER_SIZE + 1];
 	int			bytes;
 	char		*line;
 
-	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	while (ft_check_and_find_eol(stash) == -1)
 	{
