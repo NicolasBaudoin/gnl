@@ -6,7 +6,7 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:49:34 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/12/14 17:02:39 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/12/14 17:16:33 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ char	*ft_extract_line_from_stash(char **stash)
 	index = ft_check_and_find_eol(*stash);
 	if (index == -1)
 	{
-		line = ft_substr(*stash, 0, ft_strlen(*stash));
+		line = ft_subs_gnl(*stash, 0, ft_strlen(*stash));
 		free(*stash);
 		*stash = (NULL);
 		return (line);
 	}
-	line = ft_substr(*stash, 0, index + 1);
-	new_stash = ft_substr(*stash, index + 1, ft_strlen(*stash) - (index + 1));
+	line = ft_subs_gnl(*stash, 0, index + 1);
+	new_stash = ft_subs_gnl(*stash, index + 1, ft_strlen(*stash) - (index + 1));
 	free(*stash);
 	*stash = new_stash;
 	return (line);
@@ -51,7 +51,7 @@ char	*get_next_line(int fd)
 		if (bytes <= 0)
 			break ;
 		buffer[bytes] = '\0';
-		stash = ft_strjoin(&stash, buffer);
+		stash = ft_strjoin_gnl(&stash, buffer);
 	}
 	if (!stash || stash[0] == '\0')
 	{
