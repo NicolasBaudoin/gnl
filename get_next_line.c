@@ -6,11 +6,18 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:49:34 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/12/14 17:16:33 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/12/18 02:02:46 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+static int	ft_size_malloc(void)
+{
+	if (BUFFER_SIZE <= 0)
+		return (0);
+	return (BUFFER_SIZE + 1);
+}
 
 char	*ft_extract_line_from_stash(char **stash)
 {
@@ -39,17 +46,17 @@ char	*get_next_line(int fd)
 {
 	static char	*stash;
 	char		*buffer;
-	int			bytes;
 	char		*line;
+	int			bytes;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (fd < 0 || fd > 1023 || !buffer || BUFFER_SIZE <= 0)
+	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
-	while (ft_check_and_find_eol(stash) == -1)
+	buffer = malloc(ft_size_malloc());
+	if (!buffer)
+		return (NULL);
+	bytes = read(fd, buffer, BUFFER_SIZE);
+	if (ft_check_and_find_eol(stash) == -1 && bytes > 0)
 	{
-		bytes = read(fd, buffer, BUFFER_SIZE);
-		if (bytes <= 0)
-			break ;
 		buffer[bytes] = '\0';
 		stash = ft_strjoin_gnl(&stash, buffer);
 	}
