@@ -6,26 +6,33 @@
 /*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 23:49:34 by nbaudoin          #+#    #+#             */
-/*   Updated: 2025/12/18 02:02:46 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:38:35 by nbaudoin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_size_malloc(void)
+static void	ft_reset_stash_buffer(char **stash, char **buffer)
 {
-	if (BUFFER_SIZE <= 0)
-		return (0);
-	return (BUFFER_SIZE + 1);
+	if (*stash)
+	{
+		free(*stash);
+		*stash = NULL;
+	}
+	if (buffer && *buffer)
+	{
+		free(*buffer);
+		*buffer = NULL;
+	}
 }
 
-char	*ft_extract_line_from_stash(char **stash)
+static char	*ft_extract_line_from_stash(char **stash)
 {
 	char	*new_stash;
 	char	*line;
 	int		index;
 
-	if (!*stash)
+	if (!stash || !*stash)
 		return (NULL);
 	index = ft_check_and_find_eol(*stash);
 	if (index == -1)
@@ -42,31 +49,59 @@ char	*ft_extract_line_from_stash(char **stash)
 	return (line);
 }
 
+static int	read_loop(int fd, char **stash, char *buffer)
+{
+	int		bytes;
+	char	*tmp;
+
+	bytes = 1;
+	while (ft_check_and_find_eol(*stash) == -1 && bytes > 0)
+	{
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes == -1)
+			return (-1);
+		if (bytes == 0)
+			break ;
+		buffer[bytes] = '\0';
+		tmp = ft_strjoin_gnl(stash, buffer);
+		if (!tmp)
+			return (-1);
+		*stash = tmp;
+	}
+	return (bytes);
+}
+
+static int	read_and_stash(int fd, char **stash)
+{
+	char	*buffer;
+	int		bytes;
+
+	if (BUFFER_SIZE <= 0)
+		return (-1);
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (-1);
+	bytes = read_loop(fd, stash, buffer);
+	if (bytes == -1)
+		ft_reset_stash_buffer(stash, &buffer);
+	free(buffer);
+	return (bytes);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char		*buffer;
 	char		*line;
 	int			bytes;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > 1023)
 		return (NULL);
-	buffer = malloc(ft_size_malloc());
-	if (!buffer)
-		return (NULL);
-	bytes = read(fd, buffer, BUFFER_SIZE);
-	if (ft_check_and_find_eol(stash) == -1 && bytes > 0)
+	bytes = read_and_stash(fd, &stash);
+	if (bytes <= 0 || !stash || stash[0] == '\0')
 	{
-		buffer[bytes] = '\0';
-		stash = ft_strjoin_gnl(&stash, buffer);
-	}
-	if (!stash || stash[0] == '\0')
-	{
-		free(stash);
-		free(buffer);
+		ft_reset_stash_buffer(&stash, NULL);
 		return (NULL);
 	}
 	line = ft_extract_line_from_stash(&stash);
-	free(buffer);
 	return (line);
 }
